@@ -3,7 +3,7 @@ pipeline {
     agent {label 'Node'}
     
     environment{
-        SONAR_HOME = tool "Sonar"
+        SONAR_HOME = tool "sonar-scanner"
     }
     
     parameters {
@@ -32,7 +32,7 @@ pipeline {
         stage('Git: Code Checkout') {
             steps {
                 script{
-                    code_checkout("https://github.com/harshitsahu2311/Wanderlust-GitOps-Project.git","main")
+                    code_checkout("https://github.com/Ankit1680/Wanderlust-Gitops.git","main")
                 }
             }
         }
@@ -56,7 +56,7 @@ pipeline {
         stage("SonarQube: Code Analysis"){
             steps{
                 script{
-                    sonarqube_analysis("Sonar","wanderlust","wanderlust")
+                    sonarqube_analysis("sonar-scanner","wanderlust","wanderlust")
                 }
             }
         }
@@ -97,11 +97,11 @@ pipeline {
             steps{
                 script{
                         dir('backend'){
-                            docker_build("wanderlust-backend-beta","${params.BACKEND_DOCKER_TAG}","harshitsahu2311")
+                            docker_build("wanderlust-backend","${params.BACKEND_DOCKER_TAG}","ankit2849")
                         }
                     
                         dir('frontend'){
-                            docker_build("wanderlust-frontend-beta","${params.FRONTEND_DOCKER_TAG}","harshitsahu2311")
+                            docker_build("wanderlust-frontend","${params.FRONTEND_DOCKER_TAG}","ankit2849")
                         }
                 }
             }
@@ -110,8 +110,8 @@ pipeline {
         stage("Docker: Push to DockerHub"){
             steps{
                 script{
-                    docker_push("wanderlust-backend-beta","${params.BACKEND_DOCKER_TAG}","harshitsahu2311") 
-                    docker_push("wanderlust-frontend-beta","${params.FRONTEND_DOCKER_TAG}","harshitsahu2311")
+                    docker_push("wanderlust-backend","${params.BACKEND_DOCKER_TAG}","ankit2849") 
+                    docker_push("wanderlust-frontend","${params.FRONTEND_DOCKER_TAG}","ankit2849")
                 }
             }
         }
